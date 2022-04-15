@@ -1,0 +1,177 @@
+$date
+	Sat Feb 26 16:52:05 2022
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module Fulladder4_tb $end
+$var wire 4 ! sum [3:0] $end
+$var wire 1 " cout $end
+$var reg 4 # a [3:0] $end
+$var reg 4 $ b [3:0] $end
+$scope module uut $end
+$var wire 4 % a [3:0] $end
+$var wire 4 & b [3:0] $end
+$var wire 4 ' sum [3:0] $end
+$var wire 1 ( f $end
+$var wire 1 ) e $end
+$var wire 1 * d $end
+$var wire 1 " cout $end
+$scope module f1 $end
+$var wire 1 + a $end
+$var wire 1 , b $end
+$var wire 1 - cin $end
+$var wire 1 * cout $end
+$var wire 1 . sum $end
+$var reg 1 / cout_reg $end
+$var reg 1 . sum_reg $end
+$upscope $end
+$scope module f2 $end
+$var wire 1 0 a $end
+$var wire 1 1 b $end
+$var wire 1 * cin $end
+$var wire 1 ) cout $end
+$var wire 1 2 sum $end
+$var reg 1 3 cout_reg $end
+$var reg 1 2 sum_reg $end
+$upscope $end
+$scope module f3 $end
+$var wire 1 4 a $end
+$var wire 1 5 b $end
+$var wire 1 ) cin $end
+$var wire 1 ( cout $end
+$var wire 1 6 sum $end
+$var reg 1 7 cout_reg $end
+$var reg 1 6 sum_reg $end
+$upscope $end
+$scope module f4 $end
+$var wire 1 8 a $end
+$var wire 1 9 b $end
+$var wire 1 ( cin $end
+$var wire 1 " cout $end
+$var wire 1 : sum $end
+$var reg 1 ; cout_reg $end
+$var reg 1 : sum_reg $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+0;
+0:
+09
+08
+07
+16
+15
+04
+03
+12
+11
+00
+0/
+1.
+0-
+1,
+0+
+0*
+0)
+0(
+b111 '
+b111 &
+b0 %
+b111 $
+b0 #
+0"
+b111 !
+$end
+#5
+1:
+1*
+1/
+b1110 !
+b1110 '
+0.
+01
+05
+19
+1+
+14
+b1001 $
+b1001 &
+b101 #
+b101 %
+#10
+0"
+0;
+1:
+0(
+07
+16
+0*
+0/
+1.
+0)
+03
+b1111 !
+b1111 '
+12
+0,
+15
+09
+10
+04
+18
+b100 $
+b100 &
+b1011 #
+b1011 %
+#15
+1"
+1;
+0:
+1*
+1/
+0.
+1)
+13
+12
+1(
+17
+b110 !
+b110 '
+16
+1,
+11
+19
+14
+08
+b1111 $
+b1111 &
+b111 #
+b111 %
+#20
+0(
+07
+0)
+03
+16
+0*
+0/
+12
+b110 !
+b110 '
+0:
+0,
+05
+0+
+00
+18
+b1010 $
+b1010 &
+b1100 #
+b1100 %

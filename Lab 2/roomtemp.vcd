@@ -1,0 +1,269 @@
+$date
+	Tue Mar 29 16:32:27 2022
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module tb $end
+$var wire 4 ! state [3:0] $end
+$var wire 1 " heater $end
+$var wire 1 # fan $end
+$var wire 1 $ all_off $end
+$var wire 1 % ac $end
+$var reg 1 & clock $end
+$var reg 6 ' in [5:0] $end
+$var reg 1 ( rst $end
+$scope module temp_control $end
+$var wire 1 & clk $end
+$var wire 1 ( init $end
+$var wire 6 ) temp [5:0] $end
+$var wire 4 * q [3:0] $end
+$var reg 1 % ac $end
+$var reg 1 $ all_off $end
+$var reg 4 + d [3:0] $end
+$var reg 1 # fan $end
+$var reg 1 " heater $end
+$var reg 3 , temp_range [2:0] $end
+$scope module dff $end
+$var wire 1 & clk $end
+$var wire 4 - d [3:0] $end
+$var wire 1 ( rst $end
+$var reg 4 . q [3:0] $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+bx .
+bx -
+bx ,
+bx +
+bx *
+bx )
+1(
+bx '
+0&
+x%
+x$
+x#
+x"
+bx !
+$end
+#2
+0$
+0"
+0#
+0%
+b0 !
+b0 *
+b0 .
+b1 +
+b1 -
+0(
+#5
+1&
+#6
+1(
+#10
+0&
+#15
+1$
+b1 !
+b1 *
+b1 .
+1&
+#16
+b1 ,
+b10001 '
+b10001 )
+#20
+0&
+#25
+1&
+#26
+b10 +
+b10 -
+b0 ,
+b1010 '
+b1010 )
+#30
+0&
+#35
+0$
+1"
+b10 !
+b10 *
+b10 .
+1&
+#36
+b1 ,
+b10001 '
+b10001 )
+#40
+0&
+#45
+1&
+#46
+b1 +
+b1 -
+b100 ,
+b10111 '
+b10111 )
+#50
+0&
+#55
+1$
+0"
+b1 !
+b1 *
+b1 .
+1&
+#56
+b100 +
+b100 -
+b101 ,
+b11001 '
+b11001 )
+#60
+0&
+#65
+0$
+1#
+b100 !
+b100 *
+b100 .
+1&
+#66
+b100 ,
+b10111 '
+b10111 )
+#70
+0&
+#75
+1&
+#76
+b11 ,
+b10110 '
+b10110 )
+#80
+0&
+#85
+1&
+#86
+b1 +
+b1 -
+b10 ,
+b10101 '
+b10101 )
+#90
+0&
+#95
+1$
+0#
+b1 !
+b1 *
+b1 .
+1&
+#96
+b100 +
+b100 -
+b101 ,
+b11001 '
+b11001 )
+#100
+0&
+#105
+0$
+1#
+b100 !
+b100 *
+b100 .
+1&
+#106
+b1000 +
+b1000 -
+b110 ,
+b11100 '
+b11100 )
+#110
+0&
+#115
+0#
+1%
+b1000 !
+b1000 *
+b1000 .
+1&
+#116
+b100 ,
+b10111 '
+b10111 )
+#120
+0&
+#125
+1&
+#126
+b100 +
+b100 -
+b11 ,
+b10110 '
+b10110 )
+#130
+0&
+#135
+1#
+0%
+b100 !
+b100 *
+b100 .
+1&
+#136
+b10 +
+b10 -
+b0 ,
+b1101 '
+b1101 )
+#140
+0&
+#145
+1"
+0#
+b10 !
+b10 *
+b10 .
+1&
+#146
+b1000 +
+b1000 -
+b110 ,
+b11110 '
+b11110 )
+#150
+0&
+#155
+0"
+1%
+b1000 !
+b1000 *
+b1000 .
+1&
+#156
+b1 +
+b1 -
+b10 ,
+b10100 '
+b10100 )
+#160
+0&
+#165
+1$
+0%
+b1 !
+b1 *
+b1 .
+1&
+#166

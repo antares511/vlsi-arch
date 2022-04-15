@@ -1,0 +1,76 @@
+#! /usr/local/Cellar/icarus-verilog/11.0/bin/vvp
+:ivl_version "11.0 (stable)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "/usr/local/Cellar/icarus-verilog/11.0/lib/ivl/system.vpi";
+:vpi_module "/usr/local/Cellar/icarus-verilog/11.0/lib/ivl/vhdl_sys.vpi";
+:vpi_module "/usr/local/Cellar/icarus-verilog/11.0/lib/ivl/vhdl_textio.vpi";
+:vpi_module "/usr/local/Cellar/icarus-verilog/11.0/lib/ivl/v2005_math.vpi";
+:vpi_module "/usr/local/Cellar/icarus-verilog/11.0/lib/ivl/va_math.vpi";
+S_0x7fe6f89043b0 .scope module, "ppgen4x1_tb" "ppgen4x1_tb" 2 3;
+ .timescale 0 0;
+v0x600000b8c630_0 .var "mxin", 3 0;
+v0x600000b8c6c0_0 .var "myin", 0 0;
+v0x600000b8c750_0 .net "ppout", 3 0, L_0x60000088c1e0;  1 drivers
+S_0x7fe6f8904520 .scope module, "uut" "ppgen4x1" 2 8, 3 1 0, S_0x7fe6f89043b0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 4 "mxin";
+    .port_info 1 /INPUT 1 "myin";
+    .port_info 2 /OUTPUT 4 "ppout";
+L_0x60000128c0e0 .functor AND 1, L_0x60000088c000, v0x600000b8c6c0_0, C4<1>, C4<1>;
+L_0x60000128c150 .functor AND 1, L_0x60000088c0a0, v0x600000b8c6c0_0, C4<1>, C4<1>;
+L_0x60000128c1c0 .functor AND 1, L_0x60000088c140, v0x600000b8c6c0_0, C4<1>, C4<1>;
+L_0x60000128c230 .functor AND 1, L_0x60000088c280, v0x600000b8c6c0_0, C4<1>, C4<1>;
+v0x600000b8c000_0 .net *"_ivl_10", 0 0, L_0x60000128c150;  1 drivers
+v0x600000b8c090_0 .net *"_ivl_15", 0 0, L_0x60000088c140;  1 drivers
+v0x600000b8c120_0 .net *"_ivl_16", 0 0, L_0x60000128c1c0;  1 drivers
+v0x600000b8c1b0_0 .net *"_ivl_22", 0 0, L_0x60000088c280;  1 drivers
+v0x600000b8c240_0 .net *"_ivl_23", 0 0, L_0x60000128c230;  1 drivers
+v0x600000b8c2d0_0 .net *"_ivl_3", 0 0, L_0x60000088c000;  1 drivers
+v0x600000b8c360_0 .net *"_ivl_4", 0 0, L_0x60000128c0e0;  1 drivers
+v0x600000b8c3f0_0 .net *"_ivl_9", 0 0, L_0x60000088c0a0;  1 drivers
+v0x600000b8c480_0 .net "mxin", 3 0, v0x600000b8c630_0;  1 drivers
+v0x600000b8c510_0 .net "myin", 0 0, v0x600000b8c6c0_0;  1 drivers
+v0x600000b8c5a0_0 .net "ppout", 3 0, L_0x60000088c1e0;  alias, 1 drivers
+L_0x60000088c000 .part v0x600000b8c630_0, 0, 1;
+L_0x60000088c0a0 .part v0x600000b8c630_0, 1, 1;
+L_0x60000088c140 .part v0x600000b8c630_0, 2, 1;
+L_0x60000088c1e0 .concat8 [ 1 1 1 1], L_0x60000128c0e0, L_0x60000128c150, L_0x60000128c1c0, L_0x60000128c230;
+L_0x60000088c280 .part v0x600000b8c630_0, 3, 1;
+    .scope S_0x7fe6f89043b0;
+T_0 ;
+    %vpi_call 2 12 "$dumpfile", "task1_dataflow.vcd" {0 0 0};
+    %vpi_call 2 13 "$dumpvars", 32'sb00000000000000000000000000000000, S_0x7fe6f89043b0 {0 0 0};
+    %vpi_call 2 14 "$monitor", $time, " mxin = %4b, myin = %b, out = %4b", v0x600000b8c630_0, v0x600000b8c6c0_0, v0x600000b8c750_0 {0 0 0};
+    %pushi/vec4 9, 0, 4;
+    %store/vec4 v0x600000b8c630_0, 0, 4;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x600000b8c6c0_0, 0, 1;
+    %delay 5, 0;
+    %pushi/vec4 9, 0, 4;
+    %store/vec4 v0x600000b8c630_0, 0, 4;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x600000b8c6c0_0, 0, 1;
+    %delay 5, 0;
+    %pushi/vec4 10, 0, 4;
+    %store/vec4 v0x600000b8c630_0, 0, 4;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x600000b8c6c0_0, 0, 1;
+    %delay 5, 0;
+    %pushi/vec4 11, 0, 4;
+    %store/vec4 v0x600000b8c630_0, 0, 4;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x600000b8c6c0_0, 0, 1;
+    %delay 5, 0;
+    %pushi/vec4 13, 0, 4;
+    %store/vec4 v0x600000b8c630_0, 0, 4;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x600000b8c6c0_0, 0, 1;
+    %end;
+    .thread T_0;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "task1_tb.v";
+    "./task1_dataflow.v";

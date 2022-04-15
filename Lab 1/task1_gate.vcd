@@ -1,0 +1,50 @@
+$date
+	Tue Mar 29 16:15:43 2022
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module ppgen4x1_tb $end
+$var wire 4 ! out [3:0] $end
+$var reg 4 " mxin [3:0] $end
+$var reg 1 # myin $end
+$scope module uut $end
+$var wire 4 $ mxin [3:0] $end
+$var wire 1 # myin $end
+$var wire 4 % ppout [3:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b1001 %
+b1001 $
+1#
+b1001 "
+b1001 !
+$end
+#5
+b0 !
+b0 %
+0#
+#10
+b1010 !
+b1010 %
+1#
+b1010 "
+b1010 $
+#15
+b0 !
+b0 %
+0#
+b1011 "
+b1011 $
+#20
+b1101 !
+b1101 %
+1#
+b1101 "
+b1101 $

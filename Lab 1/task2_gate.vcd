@@ -1,0 +1,83 @@
+$date
+	Tue Mar 29 16:29:31 2022
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module Fulladder4_tb $end
+$var wire 4 ! sum [3:0] $end
+$var wire 1 " cout $end
+$var reg 4 # a [3:0] $end
+$var reg 4 $ b [3:0] $end
+$scope module uut $end
+$var wire 4 % a [3:0] $end
+$var wire 4 & b [3:0] $end
+$var wire 1 ' c1 $end
+$var wire 1 ( c2 $end
+$var wire 1 ) c3 $end
+$var wire 1 " cout $end
+$var wire 10 * w [9:0] $end
+$var wire 4 + sum [3:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b111 +
+b0z *
+0)
+0(
+0'
+b111 &
+b0 %
+b111 $
+b0 #
+0"
+b111 !
+$end
+#5
+b1110 !
+b1110 +
+1'
+b1001 $
+b1001 &
+b101 #
+b101 %
+#10
+0"
+0)
+0(
+0'
+b1111 !
+b1111 +
+b0z *
+b100 $
+b100 &
+b1011 #
+b1011 %
+#15
+1"
+1(
+1)
+1'
+b110 !
+b110 +
+b10111111z *
+b1111 $
+b1111 &
+b111 #
+b111 %
+#20
+0)
+0(
+0'
+b110 !
+b110 +
+b1000000z *
+b1010 $
+b1010 &
+b1100 #
+b1100 %
