@@ -1,5 +1,6 @@
-module processor();
+module processor(clock);
     
+    input clock;
     reg [15:0] r [0:15];                                //registers        
     reg [15:0] t [0:1];                                 //temporary registers
     reg [15:0] pc, ao, di, do, irf, ire;                //other registers
@@ -15,9 +16,7 @@ module processor();
     wire [15:0] wr_pc_in, wr_pc_inf;                    
     wire [15:0] wr_ao_in, wr_ao_inf; 
     wire [15:0] ALU_in_2;
-    wire [2:0] dummy1;
-    wire [3:0] dummy2;                                   
-
+    
     
     //CONTROL SIGNALS
     wire [15:0] wr_r_a_b, wr_r, rd_r_a, rd_r_b;         //read and write signals for registers, a_b is 1 for a
@@ -78,7 +77,7 @@ module processor();
     assign wr_ao_inf = wr_ao ? wr_ao_in : wr_ao_inf;
     
     assign wr_do_in = wr_do ? b : wr_do_in;
-    assign wr_di_in = wr_di ? a : wr_di_in;
+    assign wr_di_in = wr_di ? edb : wr_di_in;
     assign wr_ire_in = wr_ire ? irf : wr_ire_in;
     assign wr_irf_in = wr_irf ? edb : wr_irf_in;
 
@@ -145,6 +144,39 @@ module processor();
 
     //Setting k val
     assign k = k_val[1] ? 16'hffff : (k_val[0] ? 16'h0001 : 16'h0000) ;
+
+    //Clocked register transfers
+    always @ (posedge clock) begin
+    
+        r[0] <= wr_r_inf[0];
+        r[1] <= wr_r_inf[1];
+        r[2] <= wr_r_inf[2];
+        r[3] <= wr_r_inf[3];
+        r[4] <= wr_r_inf[4];
+        r[5] <= wr_r_inf[5];
+        r[6] <= wr_r_inf[6];
+        r[7] <= wr_r_inf[7];
+        r[8] <= wr_r_inf[8];
+        r[9] <= wr_r_inf[9];
+        r[10] <= wr_r_inf[10];
+        r[11] <= wr_r_inf[11];
+        r[12] <= wr_r_inf[12];
+        r[13] <= wr_r_inf[13];
+        r[14] <= wr_r_inf[14];
+        r[15] <= wr_r_inf[15];
+
+        t[0] <= wr_t1_inf;
+        t[1] <= wr_t2_inf;
+
+        pc <= wr_pc_inf;
+        ao <= wr_ao_inf;
+        di <= wr_di_in;
+        do <= wr_do_in;
+        irf <= wr_irf_in;
+        ire <= wr_ire_in;
+
+    end
+
 
 endmodule
 
