@@ -8,28 +8,51 @@ module processor(clock);
     wire [15:0] k;
     wire [15:0] a, b, eab, edb;                         //Buses
     
+    reg [15:0] dummy1, dummy2;                          //FOR TESTING PURPOSES
+    reg d1, d2, d3, d4, d5, d6, d7;                     //FOR TESTING PURPOSES
+
 
     //INTERMEDIATE WIRES
-    wire [15:0] wr_r_in, wr_r_inf [0:15];               //in refers to data before after mux, before switch, inf refers to data at input of reg
+    wire [15:0] wr_r_in [0:15];               //in refers to data before after mux, before switch, inf refers to data at input of reg
+    wire [15:0] wr_r_inf [0:15];               //in refers to data before after mux, before switch, inf refers to data at input of reg
     wire [15:0] wr_t1_in, wr_t1_inf;
     wire [15:0] wr_t2_in, wr_t2_inf;                    
     wire [15:0] wr_pc_in, wr_pc_inf;                    
     wire [15:0] wr_ao_in, wr_ao_inf; 
+    wire [15:0] wr_irf_in; 
+    wire [15:0] wr_ire_in; 
+    wire [15:0] wr_do_in; 
+    wire [15:0] wr_di_in; 
+    
     wire [15:0] ALU_in_2;
     
     
     //CONTROL SIGNALS
     wire [15:0] wr_r_a_b, wr_r, rd_r_a, rd_r_b;         //read and write signals for registers, a_b is 1 for a
     wire [1:0] rd_t_a, rd_t_b;                          //read signals for temporary registers
-    wire rd_pc, rd_di, rd_ao, rd_do;                    //more read signals                                       
+    wire rd_pc_a, rd_pc_b, rd_di, rd_ao, rd_do;         //more read signals                                       
     wire wr_t1, wr_t2, wr_t2_a_b;                       //write signals for temporary registers
    
     wire [2:0] alu_op;                                  //ALU function
     wire [1:0] k_val;                                   //Value of k
     wire ALU_in_2_sel;                                  //Chooses input as bus b or constant k
     wire wr_irf, wr_ire, wr_di, wr_do, wr_pc, wr_pc_a_b, wr_ao, wr_ao_a_b;    //write control signals
+    wire wr_rd_mem;                                     //reads memory when 0, writes memory when 1
     
-    
+    /*FOR TESTING PURPOSES ONLY
+    assign rd_r_a[15:0] = 16'b0;
+    assign rd_r_b[15:0] = 16'b0;
+    assign rd_t_a = 2'b00;
+    assign wr_di = d3;
+    assign rd_pc_a = d1;
+    assign wr_ao = d2;
+    assign wr_ao_a_b = d2;
+    assign rd_ao = d4;
+    assign wr_irf = 1'b0;
+    assign wr_do = d6;
+    assign rd_do = d7;
+    assign wr_rd_mem = d5;*/                    
+
     //COMBINATIONAL READ AND WRITE LOGIC
     //Write input before switch
     assign wr_r_in[0] = wr_r_a_b[0] ? a : b;
@@ -73,10 +96,11 @@ module processor(clock);
     
     assign wr_t1_inf = wr_t1 ? wr_t1_in : wr_t1_inf;
     assign wr_t2_inf = wr_t2 ? wr_t2_in : wr_t2_inf;
-    assign wr_pc_inf = wr_pc ? wr_pc_in : wr_pc_inf;
+    //assign wr_pc_inf = wr_pc ? wr_pc_in : wr_pc_inf;
+    assign wr_pc_inf = 16'h0000;                                    //FOR TESTING PURPOSES ONLY
     assign wr_ao_inf = wr_ao ? wr_ao_in : wr_ao_inf;
     
-    assign wr_do_in = wr_do ? b : wr_do_in;
+    assign wr_do_in = wr_do ? a : wr_do_in;
     assign wr_di_in = wr_di ? edb : wr_di_in;
     assign wr_ire_in = wr_ire ? irf : wr_ire_in;
     assign wr_irf_in = wr_irf ? edb : wr_irf_in;
@@ -108,7 +132,7 @@ module processor(clock);
     assign a = rd_t_a[0] ? t[0] : 16'hzzzz;
     assign a = rd_t_a[1] ? t[1] : 16'hzzzz;
     
-    assign a = rd_pc ? pc : 16'hzzzz;
+    assign a = rd_pc_a ? pc : 16'hzzzz;
 
 
     //Assigning inputs to bus B
@@ -132,15 +156,15 @@ module processor(clock);
     assign b = rd_t_b[0] ? t[0] : 16'hzzzz;
     assign b = rd_t_b[1] ? t[1] : 16'hzzzz;
     
-    assign b = rd_pc ? pc : 16'hzzzz;
+    assign b = rd_pc_b ? pc : 16'hzzzz;
     assign b = rd_di ? di : 16'hzzzz;
     
     //Assigning inputs to EAB and EDB
     assign eab = rd_ao ? ao : 16'hzzzz;
     assign edb = rd_do ? do : 16'hzzzz;
     
-    //Accessing memory
-    assign edb = rd_ao ? mem[eab] : edb;
+    //Reading memory
+    assign edb = (rd_ao & (~wr_rd_mem)) ? mem[eab] : 16'hzzzz;     
 
     //Setting k val
     assign k = k_val[1] ? 16'hffff : (k_val[0] ? 16'h0001 : 16'h0000) ;
@@ -175,8 +199,10 @@ module processor(clock);
         irf <= wr_irf_in;
         ire <= wr_ire_in;
 
+        if (wr_rd_mem == 1) begin
+            mem[eab] <= edb;
+        end 
     end
-
 
 endmodule
 
