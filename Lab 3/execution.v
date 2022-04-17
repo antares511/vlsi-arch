@@ -27,18 +27,19 @@ module execution(clock);
     input clock;
 
     reg [15:0] r [0:15];
-    reg [15:0] t [0:1];
+    reg [15:0] t1, t2;
     reg [15:0] m [0:31];
     reg [15:0] a, b, eab, edb;
     reg [15:0] pc, ao, di, do, irf, ire;
     reg [4:0] ib_addr, sb_addr, bc_addr, db_addr, state;
+    reg [3:0] rx, ry;
     reg [1:0] TY;
     
-    reg error, flag_v, flag_n, flag_z, flag_c, carry, set_flag;
+    reg error, flag_v, flag_n, flag_z, flag_c, carry;
     reg [15:0] alu_b;
 
     //FOR TESTING PURPOSES ONLY
-    
+    reg r_wbar;
 
     always @ (posedge clock) begin
 
@@ -50,7 +51,7 @@ module execution(clock);
         endcase
         
         
-        alu(b_k, op, out);      //FOR TESTING PURPOSES ONLY
+        memory(r_wbar);      //FOR TESTING PURPOSES ONLY
     end
 
 
@@ -58,6 +59,7 @@ module execution(clock);
     task alu;    
         input [1:0] b_kbar;
         input [2:0] op;
+        input set_flag;
         output [15:0] c;
 
         begin  
@@ -96,8 +98,8 @@ module execution(clock);
 
         begin
             case(r_wbar)
-            1'b1: edb = m[eab];
-            1'b0: m[eab] = edb;
+            1'b1: edb = m[ao];
+            1'b0: m[ao] = edb;
             endcase
         end
 
@@ -145,6 +147,14 @@ module execution(clock);
 
         endcase
 
+        //rx = irf[9:6];
+        //ry = irf[3:0];
+
+    endtask
+
+    task set_rx_ry;
+        rx = ire[9:6];
+        ry = ire[3:0]
     endtask
 
 endmodule
