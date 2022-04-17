@@ -23,6 +23,13 @@ module execution(clock);
     parameter oprr1 = 5'b10100;
     parameter oprr2 = 5'b10101;
 
+    parameter write = 1'b0;
+    parameter read = 1'b1;
+
+    parameter IB = 2'b00;
+    parameter SB = 2'b01;
+    parameter BC = 2'b10;
+    parameter DB = 2'b11;
 
     input clock;
 
@@ -31,7 +38,7 @@ module execution(clock);
     reg [15:0] m [0:31];
     reg [15:0] a, b, eab, edb;
     reg [15:0] pc, ao, di, do, irf, ire;
-    reg [4:0] ib_addr, sb_addr, bc_addr, db_addr, state;
+    reg [4:0] ib_addr, sb_addr, bc_addr, db_addr, state, next_state;
     reg [3:0] rx, ry;
     reg [1:0] TY;
     
@@ -41,16 +48,19 @@ module execution(clock);
     //FOR TESTING PURPOSES ONLY
     reg r_wbar;
 
+    always @ (*) begin
+        case(TY)
+            IB: next_state = ib_addr;
+            SB: next_state = sb_addr;
+            BC: next_state = bc_addr;
+            DB: next_state = db_addr;
+        endcase
+    end
+
     always @ (posedge clock) begin
 
-        case(TY)
-        2'b00: state = ib_addr;
-        2'b01: state = sb_addr;
-        2'b10: state = bc_addr;
-        2'b11: state = db_addr;
-        endcase
-        
-        
+        state = next_state;
+
         memory(r_wbar);      //FOR TESTING PURPOSES ONLY
     end
 
@@ -60,7 +70,6 @@ module execution(clock);
         input [1:0] b_kbar;
         input [2:0] op;
         input set_flag;
-        output [15:0] c;
 
         begin  
             case(b_kbar)
@@ -71,21 +80,22 @@ module execution(clock);
             endcase  
             
             case(op)
-            3'b000: {carry, c} = a + alu_b;  
-            3'b001: {carry, c} = a - alu_b;
-            3'b010: c = a & alu_b;
-            3'b011: c = ~(a & alu_b);
-            3'b100: c = a | alu_b;
-            3'b101: c = ~(a | alu_b);
-            3'b110: c = a ^ alu_b;
-            3'b111: c = ~(a ^ alu_b);
+            3'b000: {carry, t1} = a + alu_b;  
+            3'b001: {carry, t1} = a - alu_b;
+            3'b010: t1 = a & alu_b;
+            3'b011: t1 = ~(a & alu_b);
+            3'b100: t1 = a | alu_b;
+            3'b101: t1 = ~(a | alu_b);
+            3'b110: t1 = a ^ alu_b;
+            3'b111: t1 = ~(a ^ alu_b);
             endcase
            
+
             if (set_flag == 1'b1) begin
                 flag_c = carry;
-                flag_v = ~(a[15] ^ alu_b[15]) & (c[15] ^ (~(a[15] ^ alu_b[15])));
-                flag_z = ~|(c);
-                flag_n = c[15];
+                flag_v = ~(a[15] ^ alu_b[15]) & (t1[15] ^ (~(a[15] ^ alu_b[15])));
+                flag_z = ~|(t1);
+                flag_n = t1[15];
             end else 
             {flag_c, flag_v, flag_z, flag_n} = 4'b0000;
         end
@@ -98,8 +108,8 @@ module execution(clock);
 
         begin
             case(r_wbar)
-            1'b1: edb = m[ao];
-            1'b0: m[ao] = edb;
+            read: edb = m[ao];
+            write: m[ao] = edb;
             endcase
         end
 
@@ -147,14 +157,13 @@ module execution(clock);
 
         endcase
 
-        //rx = irf[9:6];
-        //ry = irf[3:0];
-
     endtask
 
     task set_rx_ry;
+    begin
         rx = ire[9:6];
-        ry = ire[3:0]
+        ry = ire[3:0];
+    end
     endtask
 
 endmodule
