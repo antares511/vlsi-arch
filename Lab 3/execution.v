@@ -1,6 +1,6 @@
 
 
-module execution();
+module execution(clock);
 
     parameter abdm1 = 5'b00000;
     parameter abdm2 = 5'b00001;
@@ -26,6 +26,7 @@ module execution();
     parameter oprr2 = 5'b10101;
 
 
+    input clock;
 
     reg [15:0] r [0:15];
     reg [15:0] t [0:1];
@@ -37,14 +38,14 @@ module execution();
     reg error;
 
     task alu;    
-        input b_kbar;
-        input [1:0] k;
+        input [1:0] b_kbar;
+        input [2:0] op;
         output [15:0] c;
 
         begin  
             case(b_kbar)
-            1'b1: begin
-                case(ire[12:10])
+            2'b11: begin
+                case(op)
                 3'b000: c = a + b;  
                 3'b001: c = a - b;
                 3'b010: c = a & b;
@@ -55,16 +56,40 @@ module execution();
                 3'b111: c = ~(a ^ b);
                 endcase
             end
-            1'b0: begin
-                case(ire[12:10])
-                3'b000: c = a + k;  
-                3'b001: c = a - k;
-                3'b010: c = a & k;
-                3'b011: c = ~(a & k);
-                3'b100: c = a | k;
-                3'b101: c = ~(a | k);
-                3'b110: c = a ^ k;
-                3'b111: c = ~(a ^ k);
+            2'b00: begin
+                case(op)
+                3'b000: c = a + 16'h0000;  
+                3'b001: c = a - 16'h0000;
+                3'b010: c = a & 16'h0000;
+                3'b011: c = ~(a & 16'h0000);
+                3'b100: c = a | 16'h0000;
+                3'b101: c = ~(a | 16'h0000);
+                3'b110: c = a ^ 16'h0000;
+                3'b111: c = ~(a ^ 16'h0000);
+                endcase
+            end
+            2'b01: begin
+                case(op)
+                3'b000: c = a + 16'h0001;  
+                3'b001: c = a - 16'h0001;
+                3'b010: c = a & 16'h0001;
+                3'b011: c = ~(a & 16'h0001);
+                3'b100: c = a | 16'h0001;
+                3'b101: c = ~(a | 16'h0001);
+                3'b110: c = a ^ 16'h0001;
+                3'b111: c = ~(a ^ 16'h0001);
+                endcase
+            end
+            2'b00: begin
+                case(op)
+                3'b000: c = a + 16'h1111;  
+                3'b001: c = a - 16'h1111;
+                3'b010: c = a & 16'h1111;
+                3'b011: c = ~(a & 16'h1111);
+                3'b100: c = a | 16'h1111;
+                3'b101: c = ~(a | 16'h1111);
+                3'b110: c = a ^ 16'h1111;
+                3'b111: c = ~(a ^ 16'h1111);
                 endcase
             end
             endcase
@@ -72,7 +97,7 @@ module execution();
 
     endtask
 
-    task mem;
+    task memory;
         
         input r_wbar;
 
@@ -128,5 +153,8 @@ module execution();
         endcase
     
     endtask
+
+
+
 
 endmodule
