@@ -95,9 +95,9 @@ module state_rtl(clock);
 
                 instruction_decode();
                 TY = BC;
-                if(Z = 1)
+                if(flag_z = 1)
                     bc_addr = brzz2;
-                else if (Z = 0)
+                else if (flag_z = 0)
                     bc_addr = brzz3;
             end
 
