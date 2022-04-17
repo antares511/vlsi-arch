@@ -38,7 +38,7 @@ module state_rtl(clock);
             begin
                 a = pc;
                 ao = a;
-                alu(2'b01, 3'b000);
+                alu(2'b01, 3'b000, 1'b0);
                 memory(read);
                 di = edb;
 
@@ -59,7 +59,7 @@ module state_rtl(clock);
             begin
                 b = di;
                 a = r[ry];
-                alu(2'b11, 3'b000);
+                alu(2'b11, 3'b000, 1'b0);
 
                 TY = DB;
                 db_addr = abdm4; 
@@ -89,7 +89,7 @@ module state_rtl(clock);
             begin
                 a = r[ry];
                 ao = a;
-                alu(2'b01, 3'b000);
+                alu(2'b01, 3'b000, 1'b0);
                 memory(read);
                 irf = edb;
 
@@ -114,7 +114,7 @@ module state_rtl(clock);
             begin
                 a = pc;
                 ao = a;
-                alu(2'b01, 3'b000);
+                alu(2'b01, 3'b000, 1'b0);
                 memory(read);
                 irf = edb;
 
@@ -130,7 +130,7 @@ module state_rtl(clock);
                 t2 = b;
                 a = pc;
                 ao = a;
-                alu(2'b01, 3'b000);
+                alu(2'b01, 3'b000, 1'b0);
                 memory(read);
                 irf = edb;
 
@@ -144,7 +144,7 @@ module state_rtl(clock);
                 b = t1;
                 pc = b;
                 a = t2;
-                alu(2'b00, 3'b000);
+                alu(2'b00, 3'b000, 1'b1);
                 ire = irf;
 
                 TY = IB;
@@ -157,7 +157,7 @@ module state_rtl(clock);
                 ao = b;
                 do = a;
                 memory(write);
-                alu(2'b00, 3'b000);
+                alu(2'b00, 3'b000, 1'b1);
 
                 TY = DB;
                 db_addr = brzz3;
@@ -171,7 +171,7 @@ module state_rtl(clock);
                 ao = a;
                 memory(read)
                 irf = edb;
-                alu(2'b01, 3'b000);
+                alu(2'b01, 3'b000, 1'b0);
 
                 instruction_decode();
                 TY = DB;
@@ -182,7 +182,7 @@ module state_rtl(clock);
             begin
                 b = di;
                 a = r[rx];
-                alu(2'b11, ire[11:9]);
+                alu(2'b11, ire[11:9], 1'b1);
 
                 TY = DB;
                 db_addr = oprm2;
@@ -209,7 +209,7 @@ module state_rtl(clock);
                 t2 = b;
                 memory(read);
                 irf = edb;
-                alu(2'b01, 3'b000);
+                alu(2'b01, 3'b000, 1'b0);
 
                 instruction_decode();
                 TY = DB;
@@ -225,7 +225,7 @@ module state_rtl(clock);
                 t2 = b;
                 memory(read);
                 irf = edb;
-                alu(2'b01, 3'b000);
+                alu(2'b01, 3'b000, 1'b0);
 
                 instruction_decode();
                 TY = DB;
@@ -238,7 +238,7 @@ module state_rtl(clock);
                 ao = a;
                 memory(read);
                 di = edb;
-                alu(2'b01, 3'b000);
+                alu(2'b01, 3'b000, 1'b0);
 
                 TY = DB;
                 db_addr = popr2;
@@ -258,7 +258,7 @@ module state_rtl(clock);
             push1: //push1
             begin
                 a = r[ry];
-                alu(2'b10, 3'b000);
+                alu(2'b10, 3'b000, 1'b0);
 
                 TY = DB;
                 db_addr = push2;
@@ -281,7 +281,7 @@ module state_rtl(clock);
             begin
                 a = r[rx];
                 b = r[ry];
-                alu(2'b11, ire[11:9]);
+                alu(2'b11, ire[11:9], 1'b1);
 
                 TY = DB;
                 db_addr = oprr2;
@@ -295,7 +295,7 @@ module state_rtl(clock);
                 ao = a;
                 memory(read);
                 irf = edb;
-                alu(2'b01, 3'b000);
+                alu(2'b01, 3'b000, 1'b0);
 
                 instruction_decode();
                 TY = DB;
