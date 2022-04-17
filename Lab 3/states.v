@@ -25,6 +25,11 @@ module state_rtl(clock);
     parameter write = 1'b0;
     parameter read = 1'b1;
 
+    parameter IB = 2'b00;
+    parameter SB = 2'b01;
+    parameter BC = 2'b10;
+    parameter DB = 2'b11;
+
     always @ (posedge clock) begin
         case(state)
             abdm1: //abdm1
@@ -34,12 +39,18 @@ module state_rtl(clock);
                 alu(2'b01, 3'b000);
                 memory(read);
                 di = edb;
+
+                TY = DB;
+                db_addr = abdm2; 
             end
 
             abdm2: //abdm2
             begin
                 a = t1;
                 pc = a;
+
+                TY = DB;
+                db_addr = abdm3; 
             end
 
             abdm3: //abdm3
@@ -47,6 +58,9 @@ module state_rtl(clock);
                 b = di;
                 a = r[ry];
                 alu(2'b11, 3'b000);
+
+                TY = DB;
+                db_addr = abdm4; 
             end
 
             abdm4: //abdm4
@@ -55,6 +69,7 @@ module state_rtl(clock);
                 ao = a;
                 t2 = a;
                 
+                TY = SB;
             end
 
             adrm1: //adrm1
@@ -64,6 +79,8 @@ module state_rtl(clock);
                 t2 = b;
                 memory(read);
                 di = edb;
+
+                TY = SB;
             end
 
             brzz1: //brzz1
@@ -73,6 +90,12 @@ module state_rtl(clock);
                 alu(2'b01, 3'b000);
                 memory(read);
                 irf = edb;
+
+                TY = BC;
+                if(Z = 1)
+                    bc_addr = brzz2;
+                else if (Z = 0)
+                    bc_addr = brzz3;
             end
 
             brzz2: //brzz2
@@ -80,6 +103,8 @@ module state_rtl(clock);
                 ire = irf;
                 b = t1;
                 pc = b;
+
+                TY = IB;
             end
 
             brzz3: //brzz3
@@ -89,6 +114,9 @@ module state_rtl(clock);
                 alu(2'b01, 3'b000);
                 memory(read);
                 irf = edb;
+
+                TY = DB;
+                db_addr = brzz2;
             end
 
             ldrm1: //ldrm1
@@ -101,6 +129,9 @@ module state_rtl(clock);
                 alu(2'b01, 3'b000);
                 memory(read);
                 irf = edb;
+
+                TY = DB;
+                db_addr = ldrm2;
             end
 
             ldrm2: //ldrm2
@@ -110,6 +141,8 @@ module state_rtl(clock);
                 pc = b;
                 a = t2;
                 alu(2'b00, 3'b000);
+
+                TY = IB;
             end
 
             strm1: //strm1
@@ -120,6 +153,9 @@ module state_rtl(clock);
                 do = a;
                 memory(write);
                 alu(2'b00, 3'b000);
+
+                TY = DB;
+                db_addr = brzz3;
             end
 
             test1: //test1
@@ -131,6 +167,9 @@ module state_rtl(clock);
                 memory(read)
                 irf = edb;
                 alu(2'b01, 3'b000);
+
+                TY = DB;
+                db_addr = ldrm2;
             end
 
             oprm1: //oprm1
@@ -138,6 +177,9 @@ module state_rtl(clock);
                 b = di;
                 a = r[rx];
                 alu(2'b11, ire[11:9]);
+
+                TY = DB;
+                db_addr = oprm2;
             end
 
             oprm2: //oprm2
@@ -147,6 +189,9 @@ module state_rtl(clock);
                 ao = b;
                 do = a;
                 memory(write);
+
+                TY = DB;
+                db_addr = brzz3;
             end
 
             ldrr1: //ldrr1
@@ -159,6 +204,9 @@ module state_rtl(clock);
                 memory(read);
                 irf = edb;
                 alu(2'b01, 3'b000);
+
+                TY = DB;
+                db_addr = ldrm2;
             end
 
             strr1: //strr1
@@ -171,6 +219,9 @@ module state_rtl(clock);
                 memory(read);
                 irf = edb;
                 alu(2'b01, 3'b000);
+
+                TY = DB;
+                db_addr = ldrm2;
             end
 
             popr1: //popr1
@@ -180,6 +231,9 @@ module state_rtl(clock);
                 memory(read);
                 di = edb;
                 alu(2'b01, 3'b000);
+
+                TY = DB;
+                db_addr = popr2;
             end
 
             popr2: //popr2
@@ -188,12 +242,18 @@ module state_rtl(clock);
                 a = t1;
                 r[rx] = b;
                 r[ry] = a;
+
+                TY = DB;
+                db_addr = brzz3;
             end
 
             push1: //push1
             begin
                 a = r[ry];
                 alu(2'b10, 3'b000);
+
+                TY = DB;
+                db_addr = push2;
             end
 
             push2: //push2
@@ -204,6 +264,9 @@ module state_rtl(clock);
                 do = a;
                 r[ry] = b;
                 memory(write);
+
+                TY = DB;
+                db_addr = brzz3;
             end
 
             oprr1: //oprr1
@@ -211,6 +274,9 @@ module state_rtl(clock);
                 a = r[rx];
                 b = r[ry];
                 alu(2'b11, ire[11:9]);
+
+                TY = DB;
+                db_addr = oprr2;
             end
 
             oprr2: //oprr2
@@ -222,6 +288,9 @@ module state_rtl(clock);
                 memory(read);
                 irf = edb;
                 alu(2'b01, 3'b000);
+
+                TY = DB;
+                db_addr = brzz2;
             end
         endcase
     end
