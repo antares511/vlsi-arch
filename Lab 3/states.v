@@ -103,9 +103,9 @@ module state_rtl(clock);
 
             brzz2: //brzz2
             begin
-                ire = irf;
                 b = t1;
                 pc = b;
+                ire = irf;
 
                 TY = IB;
             end
@@ -141,11 +141,11 @@ module state_rtl(clock);
 
             ldrm2: //ldrm2
             begin
-                ire = irf;
                 b = t1;
                 pc = b;
                 a = t2;
                 alu(2'b00, 3'b000);
+                ire = irf;
 
                 TY = IB;
             end
