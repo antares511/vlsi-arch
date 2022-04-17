@@ -30,6 +30,8 @@ module state_rtl(clock);
     parameter BC = 2'b10;
     parameter DB = 2'b11;
 
+    //ALU: 00: Add 0; 01: Add +1; 10: Add -1; 11: Contents from A and B buses
+    
     always @ (posedge clock) begin
         case(state)
             abdm1: //abdm1
