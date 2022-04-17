@@ -28,8 +28,8 @@ module state_rtl(clock);
             begin
                 a = pc;
                 ao = a;
-                alu(k+1, unsign_add);
-                memory(read);
+                //alu(k+1, unsign_add);
+                //memory(read);
                 di = edb;
             end
 
@@ -43,7 +43,7 @@ module state_rtl(clock);
             begin
                 b = di;
                 a = r[ry];
-                alu(ab, unsign_add);
+                //alu(ab, unsign_add);
             end
 
             abdm4: //abdm4
@@ -59,7 +59,7 @@ module state_rtl(clock);
                 b = r[ry];
                 ao = b;
                 t2 = b;
-                memory(read);
+                //memory(read);
                 di = edb;
             end
 
@@ -67,8 +67,8 @@ module state_rtl(clock);
             begin
                 a = r[ry];
                 ao = a;
-                alu(k+1, unsign_add);
-                memory(read);
+                //alu(k+1, unsign_add);
+                //memory(read);
                 irf = edb;
             end
 
@@ -83,8 +83,8 @@ module state_rtl(clock);
             begin
                 a = pc;
                 ao = a;
-                alu(k+1, unsign_add);
-                memory(read);
+                //alu(k+1, unsign_add);
+                //memory(read);
                 irf = edb;
             end
 
@@ -95,8 +95,8 @@ module state_rtl(clock);
                 t2 = b;
                 a = pc;
                 ao = a;
-                alu(k+1, unsign_add);
-                memory(read);
+                //alu(k+1, unsign_add);
+                //memory(read);
                 irf = edb;
             end
 
@@ -106,7 +106,7 @@ module state_rtl(clock);
                 b = t1;
                 pc = b;
                 a = t2;
-                alu(k0, sgined_add);
+                //alu(k0, signed_add);
             end
 
             strm1: //strm1
@@ -115,8 +115,8 @@ module state_rtl(clock);
                 b = t2;
                 ao = b;
                 do = a;
-                memory(write);
-                alu(k0, signed_add);
+                //memory(write);
+                //alu(k0, signed_add);
             end
 
             test1: //test1
@@ -125,16 +125,16 @@ module state_rtl(clock);
                 t2 = b;
                 a = pc;
                 ao = a;
-                memory(read)
+                //memory(read)
                 irf = edb;
-                alu(k+1, unsigned_add);
+                //alu(k+1, unsigned_add);
             end
 
             oprm1: //oprm1
             begin
                 b = di;
                 a = r[rx];
-                alu(ab, operation);
+                //alu(ab, operation);
             end
 
             oprm2: //oprm2
@@ -143,7 +143,7 @@ module state_rtl(clock);
                 b = t2;
                 ao = b;
                 do = a;
-                memory(write);
+                //memory(write);
             end
 
             ldrr1: //ldrr1
@@ -153,9 +153,9 @@ module state_rtl(clock);
                 ao = a;
                 r[rx] = b;
                 t2 = b;
-                memory(read);
+                //memory(read);
                 irf = edb;
-                alu(k+1, unsigned_add);
+                //alu(k+1, unsigned_add);
             end
 
             strr1: //strr1
@@ -165,18 +165,18 @@ module state_rtl(clock);
                 ao = a;
                 r[ry] = b;
                 t2 = b;
-                memory(read);
+                //memory(read);
                 irf = edb;
-                alu(k+1, unsigned_add);
+                //alu(k+1, unsigned_add);
             end
 
             popr1: //popr1
             begin
                 a = r[ry];
                 ao = a;
-                memory(read);
+                //memory(read);
                 di = edb;
-                alu(k+1, signed_add);
+                //alu(k+1, unsigned_add);
             end
 
             popr2: //popr2
@@ -190,7 +190,7 @@ module state_rtl(clock);
             push1: //push1
             begin
                 a = r[ry];
-                alu(k-1, signed_add);
+                //alu(k-1, unsigned_add);
             end
 
             push2: //push2
@@ -200,14 +200,14 @@ module state_rtl(clock);
                 ao = b;
                 do = a;
                 r[ry] = b;
-                memory(write);
+                //memory(write);
             end
 
             oprr1: //oprr1
             begin
                 a = r[rx];
                 b = r[ry];
-                alu(ab, operation_s);
+                //alu(ab, operation_s);
             end
 
             oprr2: //oprr2
@@ -216,9 +216,9 @@ module state_rtl(clock);
                 b = t1;
                 r[ry] = b;
                 ao = a;
-                memory(read);
+                //memory(read);
                 irf = edb;
-                alu(k+1, unsigned_add);
+                //alu(k+1, unsigned_add);
             end
         endcase
     end
