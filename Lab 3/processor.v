@@ -55,12 +55,18 @@ module processor(clock);
             BC: next_state = bc_addr;
             DB: next_state = db_addr;
         endcase
+
+        if (pc == 16'd16) begin
+            error = 1'b1;
+        end
     end
 
     always @ (posedge clock) begin
-
+        
         if(error == 1'b1) begin
-            //Add code to terminate the program
+            $display("Error bit is set. Processor Stopped.");
+            $finish;
+            // code to terminate the program
         end
 
         state = next_state;
@@ -127,9 +133,9 @@ module processor(clock);
 
                 instruction_decode();
                 TY = BC;
-                if(flag_z = 1)
+                if(flag_z == 1'b1)
                     bc_addr = brzz2;
-                else if (flag_z = 0)
+                else if (flag_z == 1'b0)
                     bc_addr = brzz3;
             end
 
@@ -204,7 +210,7 @@ module processor(clock);
                 t2 = b;
                 a = pc;
                 ao = a;
-                memory(read)
+                memory(read);
                 irf = edb;
                 alu(2'b01, 3'b000, 1'b0);
 
