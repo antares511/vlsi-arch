@@ -31,7 +31,7 @@ module state_rtl(clock);
     parameter DB = 2'b11;
 
     //ALU: 00: Add 0; 01: Add +1; 10: Add -1; 11: Contents from A and B buses
-    
+
     always @ (posedge clock) begin
         case(state)
             abdm1: //abdm1
@@ -93,6 +93,7 @@ module state_rtl(clock);
                 memory(read);
                 irf = edb;
 
+                instruction_decode();
                 TY = BC;
                 if(Z = 1)
                     bc_addr = brzz2;
@@ -117,6 +118,7 @@ module state_rtl(clock);
                 memory(read);
                 irf = edb;
 
+                instruction_decode();
                 TY = DB;
                 db_addr = brzz2;
             end
@@ -132,6 +134,7 @@ module state_rtl(clock);
                 memory(read);
                 irf = edb;
 
+                instruction_decode();
                 TY = DB;
                 db_addr = ldrm2;
             end
@@ -170,6 +173,7 @@ module state_rtl(clock);
                 irf = edb;
                 alu(2'b01, 3'b000);
 
+                instruction_decode();
                 TY = DB;
                 db_addr = ldrm2;
             end
@@ -207,6 +211,7 @@ module state_rtl(clock);
                 irf = edb;
                 alu(2'b01, 3'b000);
 
+                instruction_decode();
                 TY = DB;
                 db_addr = ldrm2;
             end
@@ -222,6 +227,7 @@ module state_rtl(clock);
                 irf = edb;
                 alu(2'b01, 3'b000);
 
+                instruction_decode();
                 TY = DB;
                 db_addr = ldrm2;
             end
@@ -291,6 +297,7 @@ module state_rtl(clock);
                 irf = edb;
                 alu(2'b01, 3'b000);
 
+                instruction_decode();
                 TY = DB;
                 db_addr = brzz2;
             end
