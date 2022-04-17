@@ -1,5 +1,3 @@
-
-
 module execution(clock);
 
     parameter abdm1 = 5'b00000;
@@ -33,9 +31,29 @@ module execution(clock);
     reg [15:0] m [0:31];
     reg [15:0] a, b, eab, edb;
     reg [15:0] pc, ao, di, do, irf, ire;
-    reg [4:0] ib, sb, bc, db;
+    reg [4:0] ib_addr, sb_addr, bc_addr, db_addr, state;
+    reg [1:0] TY;
+    
+    reg error, flag_v, flag_n, flag_z, flag_c, carry, set_flag;
+    reg [15:0] alu_b;
 
-    reg error;
+    //FOR TESTING PURPOSES ONLY
+    
+
+    always @ (posedge clock) begin
+
+        case(TY)
+        2'b00: state = ib_addr;
+        2'b01: state = sb_addr;
+        2'b10: state = bc_addr;
+        2'b11: state = db_addr;
+        endcase
+        
+        
+        alu(b_k, op, out);      //FOR TESTING PURPOSES ONLY
+    end
+
+
 
     task alu;    
         input [1:0] b_kbar;
@@ -44,55 +62,30 @@ module execution(clock);
 
         begin  
             case(b_kbar)
-            2'b11: begin
-                case(op)
-                3'b000: c = a + b;  
-                3'b001: c = a - b;
-                3'b010: c = a & b;
-                3'b011: c = ~(a & b);
-                3'b100: c = a | b;
-                3'b101: c = ~(a | b);
-                3'b110: c = a ^ b;
-                3'b111: c = ~(a ^ b);
-                endcase
-            end
-            2'b00: begin
-                case(op)
-                3'b000: c = a + 16'h0000;  
-                3'b001: c = a - 16'h0000;
-                3'b010: c = a & 16'h0000;
-                3'b011: c = ~(a & 16'h0000);
-                3'b100: c = a | 16'h0000;
-                3'b101: c = ~(a | 16'h0000);
-                3'b110: c = a ^ 16'h0000;
-                3'b111: c = ~(a ^ 16'h0000);
-                endcase
-            end
-            2'b01: begin
-                case(op)
-                3'b000: c = a + 16'h0001;  
-                3'b001: c = a - 16'h0001;
-                3'b010: c = a & 16'h0001;
-                3'b011: c = ~(a & 16'h0001);
-                3'b100: c = a | 16'h0001;
-                3'b101: c = ~(a | 16'h0001);
-                3'b110: c = a ^ 16'h0001;
-                3'b111: c = ~(a ^ 16'h0001);
-                endcase
-            end
-            2'b00: begin
-                case(op)
-                3'b000: c = a + 16'h1111;  
-                3'b001: c = a - 16'h1111;
-                3'b010: c = a & 16'h1111;
-                3'b011: c = ~(a & 16'h1111);
-                3'b100: c = a | 16'h1111;
-                3'b101: c = ~(a | 16'h1111);
-                3'b110: c = a ^ 16'h1111;
-                3'b111: c = ~(a ^ 16'h1111);
-                endcase
-            end
+            2'b00: alu_b = 16'h0000;
+            2'b01: alu_b = 16'h0001;
+            2'b10: alu_b = 16'hffff;                
+            2'b11: alu_b = b;    
+            endcase  
+            
+            case(op)
+            3'b000: {carry, c} = a + alu_b;  
+            3'b001: {carry, c} = a - alu_b;
+            3'b010: c = a & alu_b;
+            3'b011: c = ~(a & alu_b);
+            3'b100: c = a | alu_b;
+            3'b101: c = ~(a | alu_b);
+            3'b110: c = a ^ alu_b;
+            3'b111: c = ~(a ^ alu_b);
             endcase
+           
+            if (set_flag == 1'b1) begin
+                flag_c = carry;
+                flag_v = ~(a[15] ^ alu_b[15]) & (c[15] ^ (~(a[15] ^ alu_b[15])));
+                flag_z = ~|(c);
+                flag_n = c[15];
+            end else 
+            {flag_c, flag_v, flag_z, flag_n} = 4'b0000;
         end
 
     endtask
@@ -112,38 +105,38 @@ module execution(clock);
 
     task instruction_decode;
         
-        case(ire[5:4])
+        case(irf[5:4])
         2'b00: begin 
-            casex(ire[15:10]) 
-            6'b000xxx: ib = oprr1;
-            6'b001000: ib = popr1;
-            6'b001001: ib = push1;
-            6'b010000: ib = ldrr1;
-            6'b010001: ib = strr1;
+            casex(irf[15:10]) 
+            6'b000xxx: ib_addr = oprr1;
+            6'b001000: ib_addr = popr1;
+            6'b001001: ib_addr = push1;
+            6'b010000: ib_addr = ldrr1;
+            6'b010001: ib_addr = strr1;
             default: error = 1'b1;
             endcase
         end
         2'b01: begin
-            casex (ire[15:10])
-            6'b000xxx: begin ib = adrm1; sb = oprm1; end
-            6'b001001: ib = push1;
-            6'b001000: ib = popr1;
-            6'b010000: begin ib = adrm1; sb = ldrm1; end   
-            6'b010001: begin ib = adrm1; sb = strm1; end
-            6'b011000: begin ib = adrm1; sb = brzz1; end
-            6'b011001: begin ib = adrm1; sb = test1; end  
+            casex (irf[15:10])
+            6'b000xxx: begin ib_addr = adrm1; sb_addr = oprm1; end
+            6'b001001: ib_addr = push1;
+            6'b001000: ib_addr = popr1;
+            6'b010000: begin ib_addr = adrm1; sb_addr = ldrm1; end   
+            6'b010001: begin ib_addr = adrm1; sb_addr = strm1; end
+            6'b011000: begin ib_addr = adrm1; sb_addr = brzz1; end
+            6'b011001: begin ib_addr = adrm1; sb_addr = test1; end  
             default: error = 1'b1;   
             endcase
         end    
             
         2'b10: begin
-            casex (ire[15:10])
-            6'b000xxx: begin ib = abdm1; sb = oprm1; end
-            6'b001001: ib = push1;
-            6'b001000: ib = popr1;
-            6'b010000: begin ib = abdm1; sb = ldrm1; end   
-            6'b010001: begin ib = abdm1; sb = strm1; end
-            6'b011001: begin ib = abdm1; sb = test1; end
+            casex (irf[15:10])
+            6'b000xxx: begin ib_addr = abdm1; sb_addr = oprm1; end
+            6'b001001: ib_addr = push1;
+            6'b001000: ib_addr = popr1;
+            6'b010000: begin ib_addr = abdm1; sb_addr = ldrm1; end   
+            6'b010001: begin ib_addr = abdm1; sb_addr = strm1; end
+            6'b011001: begin ib_addr = abdm1; sb_addr = test1; end
             default: error = 1'b1;
             endcase
         end
@@ -151,10 +144,7 @@ module execution(clock);
         default: error = 1'b1;
 
         endcase
-    
+
     endtask
-
-
-
 
 endmodule
