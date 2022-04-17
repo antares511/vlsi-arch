@@ -107,6 +107,7 @@ module state_rtl(clock);
                 pc = b;
                 ire = irf;
 
+                set_rx_ry();
                 TY = IB;
             end
 
@@ -147,6 +148,7 @@ module state_rtl(clock);
                 alu(2'b00, 3'b000, 1'b1);
                 ire = irf;
 
+                set_rx_ry();
                 TY = IB;
             end
 
@@ -156,6 +158,7 @@ module state_rtl(clock);
                 b = t2;
                 ao = b;
                 do = a;
+                edb = do;
                 memory(write);
                 alu(2'b00, 3'b000, 1'b1);
 
@@ -194,6 +197,7 @@ module state_rtl(clock);
                 b = t2;
                 ao = b;
                 do = a;
+                edb = do;
                 memory(write);
 
                 TY = DB;
@@ -271,6 +275,7 @@ module state_rtl(clock);
                 ao = b;
                 do = a;
                 r[ry] = b;
+                edb = do;
                 memory(write);
 
                 TY = DB;
