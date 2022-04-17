@@ -3,7 +3,7 @@ module state_rtl(clock);
     parameter abdm2 = 5'b00001;
     parameter abdm3 = 5'b00010;
     parameter abdm4 = 5'b00011;
-    parameter abrm1 = 5'b00100;
+    parameter adrm1 = 5'b00100;
     parameter brzz1 = 5'b00101;
     parameter brzz2 = 5'b00110;
     parameter brzz3 = 5'b00111;
@@ -54,7 +54,7 @@ module state_rtl(clock);
                 
             end
 
-            abrm1: //abrm1
+            adrm1: //adrm1
             begin
                 b = r[ry];
                 ao = b;
