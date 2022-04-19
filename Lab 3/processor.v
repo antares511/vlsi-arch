@@ -374,7 +374,7 @@ module processor(clock);
 
             if (set_flag == 1'b1) begin
                 flag_c = carry;
-                flag_v = ~(a[15] ^ alu_b[15]) & (t1[15] ^ (~(a[15] ^ alu_b[15])));
+                flag_v = ~(a[15] ^ alu_b[15]) & (t1[15] ^ a[15]);
                 flag_z = ~|(t1);
                 flag_n = t1[15];
             end else 
