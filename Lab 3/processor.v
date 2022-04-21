@@ -62,7 +62,7 @@ module processor(clock);
     end
 
     always @ (posedge clock) begin
-        
+
         if(error == 1'b1) begin
             $display("Error bit is set. Processor Stopped.");
             $finish;
@@ -377,8 +377,7 @@ module processor(clock);
                 flag_v = ~(a[15] ^ alu_b[15]) & (t1[15] ^ a[15]);
                 flag_z = ~|(t1);
                 flag_n = t1[15];
-            end else 
-            {flag_c, flag_v, flag_z, flag_n} = 4'b0000;
+            end
         end
 
     endtask
