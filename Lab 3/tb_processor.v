@@ -11,6 +11,7 @@ module tb ();
     initial #1500 $finish;
 
     initial begin
+        //Initialise Registers. Set to 0 if not specified
         uut.pc          = 16'h0000;
         uut.r[0]        = 16'h0000;
         uut.r[1]        = 16'h0001;
@@ -29,6 +30,7 @@ module tb ();
         uut.r[14]       = 16'h0000;
         uut.r[15]       = 16'h001F;
 
+        //Initialise Memory
         uut.m[0]    = 16'h4497;
         uut.m[1]    = 16'h0047;
         uut.m[2]    = 16'h44D7;
@@ -46,12 +48,12 @@ module tb ();
         uut.m[14]   = 16'h08C2;
         uut.m[15]   = 16'h1083;
 
-        uut.irf = uut.m[uut.pc];
-        uut.instruction_decode();
-        uut.TY = 2'b00;
-        uut.pc = uut.pc + 16'h0001;
-        uut.ire = uut.irf;
-        uut.set_rx_ry();
+        uut.irf = uut.m[uut.pc]; //Sending intruction to irf
+        uut.instruction_decode(); //Decoding
+        uut.TY = 2'b00; //To select next instruction from IB
+        uut.pc = uut.pc + 16'h0001; //Increment PC
+        uut.ire = uut.irf; //IRF -> IRE
+        uut.set_rx_ry(); //Set Rx and Ry index
     end
 
     initial begin

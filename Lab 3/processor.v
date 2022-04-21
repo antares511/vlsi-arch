@@ -1,5 +1,6 @@
 module processor(clock);
 
+    //Parameter declation for all the states. These act as varaibles
     parameter abdm1 = 5'b00000;
     parameter abdm2 = 5'b00001;
     parameter abdm3 = 5'b00010;
@@ -33,6 +34,7 @@ module processor(clock);
 
     input clock;
 
+    //Register and memory declarations
     reg [15:0] r [0:15];
     reg [15:0] t1, t2;
     reg [15:0] m [0:31];
@@ -46,6 +48,7 @@ module processor(clock);
     reg [15:0] alu_b;
 
     always @ (*) begin
+        //Next state deciding logic
         case(TY)
             IB: next_state = ib_addr;
             SB: next_state = sb_addr;
@@ -53,13 +56,16 @@ module processor(clock);
             DB: next_state = db_addr;
         endcase
 
+        //If PC goes beyond 15, error bit is set
         if (pc == 16'd16) begin
             error = 1'b1;
         end
     end
 
+    //State change on the positive edge of the clock
     always @ (posedge clock) begin
-
+        
+        //Stop the processor if error bit is set
         if(error == 1'b1) begin
             $display("Error bit is set. Processor Stopped.");
             $finish;
@@ -68,13 +74,16 @@ module processor(clock);
 
         state = next_state;
 
+        //State Level 2 flowcharts implemented for all the states. Task calls made in between whenever necessary.
+        //Task calls include memory read/write, instruction decode, alu, and set rx and ry index
+        //TY control bits are set at the end for every state; so is DB address (if needed)
         case(state)
             abdm1: //abdm1
             begin
                 a = pc;
                 ao = a;
                 alu(2'b01, 3'b000, 1'b0);
-                memory(read);
+                memory(read); //memory read
                 di = edb;
 
                 TY = DB;
@@ -94,7 +103,7 @@ module processor(clock);
             begin
                 b = di;
                 a = r[ry];
-                alu(2'b11, 3'b000, 1'b0);
+                alu(2'b11, 3'b000, 1'b0); //ALU task call
 
                 TY = DB;
                 db_addr = abdm4; 
@@ -130,7 +139,7 @@ module processor(clock);
 
                 instruction_decode();
                 TY = BC;
-                if(flag_z == 1'b1)
+                if(flag_z == 1'b1) //Branching for the branch instruction
                     bc_addr = brzz2;
                 else if (flag_z == 1'b0)
                     bc_addr = brzz3;
@@ -142,7 +151,7 @@ module processor(clock);
                 pc = b;
                 ire = irf;
 
-                set_rx_ry();
+                set_rx_ry(); //Set Rx and Ry indexes
                 TY = IB;
             end
 
@@ -154,7 +163,7 @@ module processor(clock);
                 memory(read);
                 irf = edb;
 
-                instruction_decode();
+                instruction_decode(); //Instruction decode task called
                 TY = DB;
                 db_addr = brzz2;
             end
@@ -344,12 +353,14 @@ module processor(clock);
         endcase
     end
 
+    //ALU Task implememntation
     task alu;    
-        input [1:0] b_kbar;
-        input [2:0] op;
-        input set_flag;
+        input [1:0] b_kbar; //2 bits to decide whether the operation is, a + 0, a + 1, a - 1, or a op b
+        input [2:0] op; //Operation bits to decide op
+        input set_flag; //1 bit to decide if the flags are set
 
         begin  
+            //Choosing second operand
             case(b_kbar)
             2'b00: alu_b = 16'h0000;
             2'b01: alu_b = 16'h0001;
@@ -357,6 +368,7 @@ module processor(clock);
             2'b11: alu_b = b;    
             endcase  
             
+            //Performing the op
             case(op)
             3'b000: {carry, t1} = a + alu_b;  
             3'b001: {carry, t1} = a - alu_b;
@@ -368,7 +380,7 @@ module processor(clock);
             3'b111: t1 = ~(a ^ alu_b);
             endcase
            
-
+            //Setting flags
             if (set_flag == 1'b1) begin
                 flag_c = carry;
                 flag_v = ~(a[15] ^ alu_b[15]) & (t1[15] ^ a[15]);
@@ -378,21 +390,23 @@ module processor(clock);
         end
     endtask
 
+    //Memory task
     task memory;
-        input r_wbar;
+        input r_wbar; //1 bit to decide whether we are reading or writing
 
         begin
             case(r_wbar)
-            read: edb = m[ao];
-            write: m[ao] = edb;
+            read: edb = m[ao]; //read from mem
+            write: m[ao] = edb; //write to mem
             endcase
         end
     endtask
 
+    //Instruction Decode task
     task instruction_decode;
-        case(irf[5:4])
+        case(irf[5:4]) //AR Mode
         2'b00: begin 
-            casex(irf[15:10]) 
+            casex(irf[15:10]) //Setting IB and SB according to op code
             6'b000xxx: ib_addr = oprr1;
             6'b001000: ib_addr = popr1;
             6'b001001: ib_addr = push1;
@@ -401,8 +415,8 @@ module processor(clock);
             default: error = 1'b1;
             endcase
         end
-        2'b01: begin
-            casex (irf[15:10])
+        2'b01: begin //AI Mode
+            casex (irf[15:10]) //Setting IB and SB according to op code
             6'b000xxx: begin ib_addr = adrm1; sb_addr = oprm1; end
             6'b001001: ib_addr = push1;
             6'b001000: ib_addr = popr1;
@@ -414,8 +428,8 @@ module processor(clock);
             endcase
         end    
             
-        2'b10: begin
-            casex (irf[15:10])
+        2'b10: begin //AB Mode
+            casex (irf[15:10]) //Setting IB and SB according to op code
             6'b000xxx: begin ib_addr = abdm1; sb_addr = oprm1; end
             6'b001001: ib_addr = push1;
             6'b001000: ib_addr = popr1;
@@ -426,8 +440,8 @@ module processor(clock);
             endcase
         end
 
-        default: begin
-            casex(irf[15:10])
+        default: begin //Ignored for POP/PUSH. Otherwise error bit
+            casex(irf[15:10]) //Setting IB and SB according to op code
             6'b001001: ib_addr = push1;
             6'b001000: ib_addr = popr1;
             default: error = 1'b1;
@@ -436,6 +450,7 @@ module processor(clock);
         endcase
     endtask
 
+    //Set Rx and Ry index task
     task set_rx_ry;
         begin
             rx = ire[9:6];
