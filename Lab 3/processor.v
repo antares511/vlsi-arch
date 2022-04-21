@@ -426,8 +426,13 @@ module processor(clock);
             endcase
         end
 
-        default: error = 1'b1;
-
+        default: begin
+            casex(irf[15:10])
+            6'b001001: ib_addr = push1;
+            6'b001000: ib_addr = popr1;
+            default: error = 1'b1;
+            endcase
+        end
         endcase
     endtask
 
