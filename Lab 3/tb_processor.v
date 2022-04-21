@@ -59,8 +59,8 @@ module tb ();
     initial begin
         clk <= 0;
 
-        //Testing register read and write functionality
-        $monitor($time,"ire = %16h", uut.ire);
+        //Testing functionality
+        $monitor($time,"ire = %h, stack pointer = %h, t1 = %h, flags C V Z N = %b %b %b %b", uut.ire, uut.r[15], uut.t1, uut.flag_c, uut.flag_v, uut.flag_z, uut.flag_n);
     end
 
 endmodule
