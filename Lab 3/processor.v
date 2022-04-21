@@ -45,9 +45,6 @@ module processor(clock);
     reg error, flag_v, flag_n, flag_z, flag_c, carry;
     reg [15:0] alu_b;
 
-    //FOR TESTING PURPOSES ONLY
-    reg r_wbar;
-
     always @ (*) begin
         case(TY)
             IB: next_state = ib_addr;
@@ -379,11 +376,9 @@ module processor(clock);
                 flag_n = t1[15];
             end
         end
-
     endtask
 
     task memory;
-        
         input r_wbar;
 
         begin
@@ -392,11 +387,9 @@ module processor(clock);
             write: m[ao] = edb;
             endcase
         end
-
     endtask
 
     task instruction_decode;
-        
         case(irf[5:4])
         2'b00: begin 
             casex(irf[15:10]) 
@@ -436,14 +429,13 @@ module processor(clock);
         default: error = 1'b1;
 
         endcase
-
     endtask
 
     task set_rx_ry;
-    begin
-        rx = ire[9:6];
-        ry = ire[3:0];
-    end
+        begin
+            rx = ire[9:6];
+            ry = ire[3:0];
+        end
     endtask
 
 endmodule
